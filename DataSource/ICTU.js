@@ -343,7 +343,7 @@ module.exports = function () {
                                             while (pivot.getDay() != thu) {
                                                 pivot.setDate(pivot.getDate() + 1);
                                             }
-                                            var entry = new TnuTimeTableEntry(hocPhan,maMon, pivot, tiets, diaDiem, hinhThuc, giaoVien, dot);
+                                            var entry = new TnuTimeTableEntry(hocPhan,maMon, pivot, tiets.toString(), diaDiem, hinhThuc, giaoVien, dot);
                                             tkb.Entries.push(entry);
                                         }
 
@@ -418,6 +418,7 @@ module.exports = function () {
                                 //     arr[3]
                                 // );
                                 var entry = new TnuTimeTableEntry(
+                                    arr[2],
                                     arr[1],
                                     arr[4],
                                     [arr[5]],
