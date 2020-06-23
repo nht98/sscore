@@ -1,4 +1,5 @@
-module.exports = function (hocPhan,maMon, thoiGian, tietHoc, diaDiem, hinhThuc, giaoVien, dot, soBaoDanh, ghiChu) {
+module.exports = function (theloai,hocPhan,maMon, thoiGian, tietHoc, diaDiem, hinhThuc, giaoVien, dot, soBaoDanh, ghiChu) {
+    this.LoaiLich = theloai || "";
     this.HocPhan = hocPhan || "";
     this.MaMon = maMon || "";
     this.ThoiGian = thoiGian || "";
