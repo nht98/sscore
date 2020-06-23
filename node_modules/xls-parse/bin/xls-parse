@@ -1,0 +1,70 @@
+#!/usr/bin/env node
+"use strict";
+var pg = require("../package.json");
+var program = require("commander");
+var colors = require("colors");
+var fs = require("fs");
+var mkdirp = require("mkdirp");
+var xlsParse = require("../parse");
+var path = require("path");
+function toJson(val) {
+  var rs = null;
+  try {
+    rs = JSON.parse(val)
+  } catch(e) {
+    //do nothing
+  }
+  return rs;
+}
+
+//展示红色错误
+function make_red(txt) {
+  return colors.red(txt);
+}
+
+program
+.version(pg.version)
+.usage('[options]')
+.option("-f, --file <filepath>", "xls file path")
+.option("-o, --outfile <outfile>", "outfile path")
+.option('--sheetname <sheetname>', 'xls sheetname')
+.option('--sorts <sort config>', 'sorts config is a json {Array | Object}', toJson)
+.option('--without <without line number>', 'without line number is a json {Array}', toJson);
+
+program.on('--help', function(){
+  console.log('  Examples:');
+  console.log('');
+  console.log("    $ xlsparse -f <file> -o <outfile> [--sheetname sheet1] [--sorts '{\"name\" : 1, \"age\": 0}'] [--without '[1,2,3,4]']");
+  console.log("    $ xlsparse -f <file> -o <outfile> [--sheetname sheet1] [--sorts '[2,1,4]'] [--without '[1,2,3,4]']");
+  console.log('');
+});
+program.parse(process.argv);
+
+var file = program.file;
+var outfile = program.outfile;
+var sheetname = program.sheetname;
+var sorts = program.sorts;
+var without = program.without;
+
+if (!file || !outfile ) {
+  program.outputHelp(make_red);
+  process.exit(1);
+}
+if(!fs.existsSync(file)) {
+  console.log("Error:" ,make_red(file + " is not exist"));
+  process.exit(1);
+}
+var data = xlsParse.formatXls2Obj(file, sheetname, sorts, without);
+if(sheetname) {
+  data = data[sheetname];
+}
+if(!data) {
+  console.log("Error:" ,make_red("exec fail"));
+  process.exit(1);
+}
+var paths = path.parse(outfile);
+if(!fs.existsSync(paths.dir)) {
+  mkdirp.sync(paths.dir);
+}
+fs.writeFileSync(outfile, JSON.stringify(data), "utf8");
+
