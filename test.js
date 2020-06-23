@@ -1,4 +1,4 @@
-const tnu = require('./TnuCore');
+const tnu = require('./sscore');
 console.log(tnu.TnuSchools);
 
 var ictu = tnu.Open("ICTU");

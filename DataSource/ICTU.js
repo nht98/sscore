@@ -91,13 +91,13 @@ module.exports = function () {
                         __URLTOKEN__ = (err.response.headers.location.match(/\(S\(.*?\)\)/gi)[0] || "") + "/";
 
                         base.Post(Endpoints.Login(__URLTOKEN__), post).then(function (resp) {
-                            if (resp.indexOf("(" + username + ")") > -1) {
-                                resolve(true);
-                                User.Username = username;
-                                User.Password = password;
-                            } else {
+                            // if (resp.indexOf("(" + username + ")") > -1) {
+                            //     resolve(true);
+                            //     User.Username = username;
+                            //     User.Password = password;
+                            // } else {
                                 resolve(false);
-                            }
+                            // }
                         }, function (err) {
                             if (!!err.response.headers["set-cookie"]) {
                                 resolve(true);
