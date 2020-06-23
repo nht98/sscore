@@ -330,20 +330,20 @@ module.exports = function () {
                                         var startTime = moment(timeRange[0], "DD/MM/YYYY").toDate();
                                         var endTime = moment(timeRange[1], "DD/MM/YYYY").toDate();
 
-                                        var subject = tkb.Subjects.filter(function (s) {
-                                            return s.MaMon == maMon;
-                                        })[0];
+                                        // var subject = tkb.Subjects.filter(function (s) {
+                                        //     return s.MaMon == maMon;
+                                        // })[0];
 
-                                        if (!subject) {
-                                            subject = new TnuSubject(maMon, tenMon, hocPhan, 0);
-                                            tkb.Subjects.push(subject);
-                                        }
+                                        // if (!subject) {
+                                        //     subject = new TnuSubject(maMon, tenMon, hocPhan, 0);
+                                        //     tkb.Subjects.push(subject);
+                                        // }
 
                                         for (var pivot = startTime; pivot.getTime() < endTime.getTime(); pivot.setDate(pivot.getDate() + 7)) {
                                             while (pivot.getDay() != thu) {
                                                 pivot.setDate(pivot.getDate() + 1);
                                             }
-                                            var entry = new TnuTimeTableEntry(maMon, pivot, tiets, diaDiem, hinhThuc, giaoVien, dot);
+                                            var entry = new TnuTimeTableEntry(hocPhan,maMon, pivot, tiets, diaDiem, hinhThuc, giaoVien, dot);
                                             tkb.Entries.push(entry);
                                         }
 
@@ -411,12 +411,12 @@ module.exports = function () {
                                     return;
                                 }
 
-                                var subject = new TnuSubject(
-                                    arr[1],
-                                    arr[2],
-                                    arr[2],
-                                    arr[3]
-                                );
+                                // var subject = new TnuSubject(
+                                //     arr[1],
+                                //     arr[2],
+                                //     arr[2],
+                                //     arr[3]
+                                // );
                                 var entry = new TnuTimeTableEntry(
                                     arr[1],
                                     arr[4],
@@ -429,7 +429,7 @@ module.exports = function () {
                                     arr[9],
                                 );
 
-                                Result.Subjects.push(subject);
+                                //Result.Subjects.push(subject);
                                 Result.Entries.push(entry);
                             }
                         });
