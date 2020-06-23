@@ -343,13 +343,19 @@ module.exports = function () {
                                             while (pivot.getDay() != thu) {
                                                 pivot.setDate(pivot.getDate() + 1);
                                             }
-                                            var entry = new TnuTimeTableEntry("LichHoc",hocPhan,maMon, pivot, tiets.toString(), diaDiem, hinhThuc, giaoVien, dot);
+                                            var date = new Date(pivot.setDate(pivot.getDate()));
+                                            var year = date.getFullYear();
+
+                                            var month = (1 + date.getMonth()).toString();
+                                            month = month.length > 1 ? month : '0' + month;
+                                          
+                                            var day = date.getDate().toString();
+                                            day = day.length > 1 ? day : '0' + day;
+                                            
+                                            var time =  day + '/' + month + '/' + year;
+                                            var entry = new TnuTimeTableEntry("LichHoc",hocPhan,maMon,time, tiets.toString(), diaDiem, hinhThuc, giaoVien, dot);
                                             tkb.Entries.push(entry);
                                         }
-
-                                        // if (i > 16) {
-                                        //     break;
-                                        // }
                                     }
                                 }
                             }
