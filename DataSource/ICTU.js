@@ -270,15 +270,15 @@ module.exports = function () {
                         if (drpTerm > -1) {
                             post["drpTerm"] = drpTerm;
                         } else {
-                            // delete post["drpTerm"];
+                            delete post["drpTerm"];
                             post["drpTerm"] = $("select[name='drpTerm']").val();
                         }
-
+                        post["drpTerm"] = 5;
                         var xlsFilePath = path.join(os.tmpdir(), parseInt(Math.random() * 1000) + (new Date().getTime()) + ".xls");
 
                         base.Post(Endpoints.Make(__URLTOKEN__ + "Reports/Form/StudentTimeTable.aspx"), post)
                         .pipe(fs.createWriteStream(xlsFilePath))
-                        .on("unpipe", function () {
+                        .on("unpipe", function () {s
                             progress++;
                             if (progress >= drpTerms.length) {
                                 resolve(tkb.Entries);
@@ -287,49 +287,63 @@ module.exports = function () {
                         .on("finish", function () {
                             var sheets = xlsParse.xls2Obj(xlsFilePath);
                             var raw = fs.readFileSync(xlsFilePath, "utf8");
+                            //fs.writeFileSync(xlsFilePath, "utf8"); 
+                            //console.log(xlsFilePath);
                             fs.unlinkSync(xlsFilePath);
                             // data.push(xlsFilePath, sheets);
                             var $ = base.ParseHtml(raw.substr(raw.indexOf('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >')));
 
                             for (var sheetName in sheets) {
                                 var sheet = sheets[sheetName];
+                                
                                 for (var i = 10; i < sheet.length - 9; i++) {
+                                    // console.log( i+" "+sheet[i]);
                                     var row = sheet[i];
-
-                                    if (row.length == 12 || row.length == 13) {
                                         var thu = ICTU_WDAY[row[0]];
                                         var maMon = row[1];
-                                        var tenMon = row[3];
                                         var hocPhan = row[4];
                                         var giaoVien = row[7];
                                         var dot = $("#drpTerm option[selected]").text().trim();
-
                                         var hinhThuc =
                                             hocPhan.match(/\.TL[0-9]/ig) ? "TL" : false
                                             ||
                                             hocPhan.match(/\.TH[0-9]/ig) ? "TH" : false
                                             ||
                                             "LT";
-
                                         var tiets = [];
-                                        if (row.length == 13) {
+                                        if (row.length == 12) {
+                                            tiets = [
+                                                parseInt(row[8].substr(1)),
+                                                parseInt(row[9]),
+                                            ];
+                                            
+                                        }if (row.length == 13) {
                                             tiets = [
                                                 parseInt(row[8].substr(1)),
                                                 parseInt(row[9]),
                                                 parseInt(row[10]),
                                             ];
-                                        } else if (row.length == 12) {
+                                        }if (row.length == 14) {
                                             tiets = [
                                                 parseInt(row[8].substr(1)),
                                                 parseInt(row[9]),
+                                                parseInt(row[10]),
+                                                parseInt(row[11]),
                                             ];
                                         }
-
+                                        if (row.length == 15) {
+                                            tiets = [
+                                                parseInt(row[8].substr(1)),
+                                                parseInt(row[9]),
+                                                parseInt(row[10]),
+                                                parseInt(row[11]),
+                                                parseInt(row[12]),
+                                            ];
+                                        }
                                         var diaDiem = row[8 + tiets.length + 0];
                                         var timeRange = row[8 + tiets.length + 1].split("-");
                                         var startTime = moment(timeRange[0], "DD/MM/YYYY").toDate();
                                         var endTime = moment(timeRange[1], "DD/MM/YYYY").toDate();
-
                                         // var subject = tkb.Subjects.filter(function (s) {
                                         //     return s.MaMon == maMon;
                                         // })[0];
@@ -338,8 +352,8 @@ module.exports = function () {
                                         //     subject = new TnuSubject(maMon, tenMon, hocPhan, 0);
                                         //     tkb.Subjects.push(subject);
                                         // }
-
-                                        for (var pivot = startTime; pivot.getTime() < endTime.getTime(); pivot.setDate(pivot.getDate() + 7)) {
+                                        
+                                        for (var pivot = startTime; pivot.getTime() <= endTime.getTime(); pivot.setDate(pivot.getDate() + 7)) {
                                             while (pivot.getDay() != thu) {
                                                 pivot.setDate(pivot.getDate() + 1);
                                             }
@@ -356,7 +370,6 @@ module.exports = function () {
                                             var entry = new TnuTimeTableEntry("LichHoc",hocPhan,maMon,time, tiets.toString(), diaDiem, hinhThuc, giaoVien, dot);
                                             tkb.Entries.push(entry);
                                         }
-                                    }
                                 }
                             }
 
@@ -416,13 +429,6 @@ module.exports = function () {
                                 if (arr.length < 10) {
                                     return;
                                 }
-
-                                // var subject = new TnuSubject(
-                                //     arr[1],
-                                //     arr[2],
-                                //     arr[2],
-                                //     arr[3]
-                                // );
                                 var entry = new TnuTimeTableEntry(
                                     "LichThi",
                                     arr[2],
@@ -436,8 +442,6 @@ module.exports = function () {
                                     arr[7],
                                     arr[9],
                                 );
-
-                                //Result.Subjects.push(subject);
                                 Result.Entries.push(entry);
                             }
                         });
@@ -464,7 +468,6 @@ module.exports = function () {
                                 .then(processExamData, reject);
                         }
                     });
-
                 }, reject);
             }, reject);
         });
