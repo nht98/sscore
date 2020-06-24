@@ -273,7 +273,6 @@ module.exports = function () {
                             delete post["drpTerm"];
                             post["drpTerm"] = $("select[name='drpTerm']").val();
                         }
-                        post["drpTerm"] = 5;
                         var xlsFilePath = path.join(os.tmpdir(), parseInt(Math.random() * 1000) + (new Date().getTime()) + ".xls");
 
                         base.Post(Endpoints.Make(__URLTOKEN__ + "Reports/Form/StudentTimeTable.aspx"), post)
