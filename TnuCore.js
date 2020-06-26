@@ -3,10 +3,12 @@ const cheerio = require('cheerio');
 const { JSDOM } = require('jsdom');
 
 var ICTU = require("./DataSource/ICTU");
-
+var TNUS = require("./DataSource/TNUS");
+var TUE = require("./DataSource/TUE");
 var TnuSchools = {
     "ICTU": ICTU,
-    "DTC": ICTU,
+    "TNUS": TNUS,
+    "TUE": TUE
 };
 
 function Open (schoolCode) {

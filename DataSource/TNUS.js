@@ -18,10 +18,10 @@ const TnuMarkTable = require('../DataStruct/TnuMarkTable');
 
 const Endpoints = {
     Raw: function (path) {
-        return "http://dangkytinchi.ictu.edu.vn/" + path;
+        return "http://daotao2.tnu.edu.vn/" + path;
     },
     Make: function (endpoint) {
-        return Endpoints.Raw( "kcntt/" + endpoint );
+        return Endpoints.Raw( "dhkh/" + endpoint );
     }
 };
 Endpoints.Login = function () {
@@ -536,6 +536,6 @@ module.exports = function () {
     }
 };
 
-module.exports["Name"] = "ICTU";
-module.exports["Title"] = "Đại học Công Nghệ Thông Tin và Truyền Thông";
-module.exports["Description"] = "ICTU";
+module.exports["Name"] = "TNUS";
+module.exports["Title"] = "Trường Đại học Khoa học - Đại học Thái Nguyên";
+module.exports["Description"] = "TNUS";

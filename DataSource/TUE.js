@@ -18,10 +18,10 @@ const TnuMarkTable = require('../DataStruct/TnuMarkTable');
 
 const Endpoints = {
     Raw: function (path) {
-        return "http://dangkytinchi.ictu.edu.vn/" + path;
+        return "http://daotao.dhsptn.edu.vn/" + path;
     },
     Make: function (endpoint) {
-        return Endpoints.Raw( "kcntt/" + endpoint );
+        return Endpoints.Raw( "dhsp/" + endpoint );
     }
 };
 Endpoints.Login = function () {
@@ -48,9 +48,9 @@ var ICTU_WDAY = {
 };
 
 module.exports = function () {
-    this["Name"] = "ICTU";
-    this["Title"] = "Đại học Công Nghệ Thông Tin và Truyền Thông";
-    this["Description"] = "ICTU";
+    this["Name"] = "TUE";
+    this["Title"] = "Trường Đại học Sư phạm - Đại học Thái Nguyên";
+    this["Description"] = "TUE";
 
     var __URLTOKEN__ = "";
 
@@ -463,7 +463,6 @@ module.exports = function () {
 
                 base.Post(Endpoints.Make(__URLTOKEN__ + "MarkAndView.aspx"), post).then(function (resp) {
                     var $ = base.ParseHtml(resp);
-
                     var arr = {
                         labels: [],
                         keys: [],
@@ -536,6 +535,6 @@ module.exports = function () {
     }
 };
 
-module.exports["Name"] = "ICTU";
-module.exports["Title"] = "Đại học Công Nghệ Thông Tin và Truyền Thông";
-module.exports["Description"] = "ICTU";
+module.exports["Name"] = "TUE";
+module.exports["Title"] = "Trường Đại học Sư phạm - Đại học Thái Nguyên";
+module.exports["Description"] = "TUE";
