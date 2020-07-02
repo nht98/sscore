@@ -129,9 +129,8 @@ module.exports = function () {
                             var id = uri.substr(uri.indexOf("?IDThongBao=") + "?IDThongBao=".length);
                             var _class = "important_news";
                             var title = A.text().trim();
-                            var time = moment(title.substr(-11,10), "DD/MM/YYYY").toDate();
-
                             var time = title.substr(-11,10);
+                            arr.push(new TnuNews(id, _class, link, time, title));
                         });
                         $("#ctl05_MyList").find(".old_news A").each(function (k, A) {
                             var A = $(A);
