@@ -1,5 +1,4 @@
 module.exports = function () {
     //this.Subjects = [];
-    this.entries = [];
+    this.Entries = [];
 };
- 

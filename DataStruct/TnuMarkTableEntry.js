@@ -3,7 +3,6 @@ module.exports = function (MaMon, TenMon, SoTC, TenMonDayDu, CC, Thi, TKHP, Diem
     this.temon = TenMon;
     this.sotc = SoTC;
     this.tenmondaydu = TenMonDayDu;
-
     this.cc = CC;
     this.thi = Thi;
     this.tkhp = TKHP;

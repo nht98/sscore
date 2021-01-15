@@ -11,7 +11,6 @@ module.exports = function () {
     this.dtbxltn = 0;
     this.dtbmontn = 0;
     this.entries = [];
-
     this.AddEntry = function (MaMon, TenMon, SoTC, TenMonDayDu, CC, Thi, TKHP, DiemChu, raw) {
         this.entries.push(new TnuMarkTableEntry(MaMon, TenMon, SoTC, TenMonDayDu, CC, Thi, TKHP, DiemChu, raw));
     }

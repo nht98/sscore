@@ -484,17 +484,15 @@ module.exports = function () {
                     });
 
                     var tb = new TnuMarkTable();
-                    tb.TongSoTC = arr.values[4].text();
-                    tb.SoTCTuongDuong = arr.values[5].text();
-                    tb.STCTLN = arr.values[6].text();
-                    tb.DTBC = arr.values[7].text();
-                    tb.DTBCQD = arr.values[8].text();
-                    tb.SoMonKhongDat = arr.values[9].text();
-                    tb.SoTCKhongDat = arr.values[10].text();
-                    tb.DTBXLTN = arr.values[11].text();
-                    tb.DTBMonTN = arr.values[12].text();
-
-
+                    tb.tongsotc = arr.values[4].text();
+                    tb.sotctuongduong = arr.values[5].text();
+                    tb.stctln = arr.values[6].text();
+                    tb.dtbc = arr.values[7].text();
+                    tb.dtbcqd = arr.values[8].text();
+                    tb.somonkhongdat = arr.values[9].text();
+                    tb.sotckhongdat = arr.values[10].text();
+                    tb.dtbxltn = arr.values[11].text();
+                    tb.dtbmontn = arr.values[12].text();
                     pivot = 13;
                     for (var i = 1; i < arr.labels.length; i++) {
                         var label = arr.labels[i];
