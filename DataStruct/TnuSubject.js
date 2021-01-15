@@ -1,6 +1,6 @@
 module.exports = function (maMon, tenMon, hocPhan, soTinChi) {
-    this.MaMon = maMon || "";
-    this.TenMon = tenMon || "";
-    this.HocPhan = hocPhan || "";
-    this.SoTinChi = soTinChi || "";
+    this.mamon = maMon || "";
+    this.tenmon = tenMon || "";
+    this.hocphan = hocPhan || "";
+    this.sotinchi = soTinChi || "";
 };

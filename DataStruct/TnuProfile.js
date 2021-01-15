@@ -1,10 +1,10 @@
 module.exports = function (truong,id, code, name, _class, major, academicYear, hedaotao) {
-    this.Truong = truong || "";
-    this.Id = id || "";
-    this.MaSinhVien = code || "";
-    this.HoTen = name || "";
-    this.Lop = _class || "";
-    this.Nganh = major || "";
-    this.NienKhoa = academicYear || "";
-    this.HeDaoTao = hedaotao || "";
+    this.truong = truong || "";
+    this.id = id || "";
+    this.code = code || "";
+    this.name = name || "";
+    this.class = _class || "";
+    this.major = major || "";
+    this.academicYear = academicYear || "";
+    this.hedaotao = hedaotao || "";
 };

@@ -1,9 +1,9 @@
 module.exports = function (id, link, time, title, tomtat, content, files) {
-    this.Id = id || "";
-    this.Link = link || "";
-    this.ThoiGian = time || "";
-    this.TieuDe = title || "";
-    this.TomTat = tomtat || "";
-    this.NoiDung = content || "";
-    this.Files = files || [];
+    this.id = id || "";
+    this.link = link || "";
+    this.time = time || "";
+    this.title = title || "";
+    this.tomtat = tomtat || "";
+    this.content = content || "";
+    this.files = files || [];
 };
