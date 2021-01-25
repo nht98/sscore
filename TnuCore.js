@@ -5,10 +5,14 @@ const { JSDOM } = require('jsdom');
 var ICTU = require("./DataSource/ICTU");
 var TNUS = require("./DataSource/TNUS");
 var TUE = require("./DataSource/TUE");
+var SFL = require("./DataSource/SFL");
+var TUAF = require("./DataSource/TUAF");
 var TnuSchools = {
     "ICTU": ICTU,
     "TNUS": TNUS,
-    "TUE": TUE
+    "TUE": TUE,
+    "SFL": SFL,
+    "TUAF": TUAF,
 };
 
 function Open (schoolCode) {

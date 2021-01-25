@@ -18,10 +18,10 @@ const TnuMarkTable = require('../DataStruct/TnuMarkTable');
 
 const Endpoints = {
     Raw: function (path) {
-        return "http://daotao2.tnu.edu.vn/" + path;
+        return "http://daotao.tnu.edu.vn/" + path;
     },
     Make: function (endpoint) {
-        return Endpoints.Raw( "dhkh/" + endpoint );
+        return Endpoints.Raw("knn/" + endpoint);
     }
 };
 Endpoints.Login = function () {
@@ -67,7 +67,7 @@ module.exports = function () {
     this.Login = function (username, password) {
         username = username || false;
         password = password || false;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             if (!username || !password) {
                 resolve(false);
             }
@@ -96,7 +96,7 @@ module.exports = function () {
                             //     User.Username = username;
                             //     User.Password = password;
                             // } else {
-                                resolve(false);
+                            resolve(false);
                             // }
                         }, function (err) {
                             if (!!err.response.headers["set-cookie"]) {
@@ -117,64 +117,61 @@ module.exports = function () {
     };
 
     this.GetNews = function () {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             base.Get(Endpoints.Home()).then(function (resp) {
-                    var $ = base.ParseHtml(resp);
-                    try {
-                        var arr = [];
-                        $("#ctl05_MyList").find(".important_news A").each(function (k, A) {
-                            var A = $(A);
-                            var uri = A.attr("href");
-                            var link = Endpoints.Make(uri);
-                            var id = uri.substr(uri.indexOf("?IDThongBao=") + "?IDThongBao=".length);
-                            var _class = "important_news";
-                            var title = A.text().trim();
-                            var time = moment(title.substr(-11,10), "DD/MM/YYYY").toDate();
-
-                            var time = title.substr(-11,10);
-                        });
-                        $("#ctl05_MyList").find(".old_news A").each(function (k, A) {
-                            var A = $(A);
-                            var uri = A.attr("href");
-                            var link = Endpoints.Make(uri);
-                            var id = uri.substr(uri.indexOf("?IDThongBao=") + "?IDThongBao=".length);
-                            var _class = "old_news";
-                            var title = A.text().trim();
-                            var time = title.substr(-11,10);
-
-                            arr.push(new TnuNews(id, _class, link, time, title));
-                        });
-                        resolve(arr);
-                    }catch(err) {
-                        reject(err);
-                    }
-                }, function (err) {
+                var $ = base.ParseHtml(resp);
+                try {
+                    var arr = [];
+                    $("#ctl05_MyList").find(".important_news A").each(function (k, A) {
+                        var A = $(A);
+                        var uri = A.attr("href");
+                        var link = Endpoints.Make(uri);
+                        var id = uri.substr(uri.indexOf("?IDThongBao=") + "?IDThongBao=".length);
+                        var _class = "important_news";
+                        var title = A.text().trim();
+                        var time = title.substr(-11, 10);
+                        arr.push(new TnuNews(id, _class, link, time, title));
+                    });
+                    $("#ctl05_MyList").find(".old_news A").each(function (k, A) {
+                        var A = $(A);
+                        var uri = A.attr("href");
+                        var link = Endpoints.Make(uri);
+                        var id = uri.substr(uri.indexOf("?IDThongBao=") + "?IDThongBao=".length);
+                        var _class = "old_news";
+                        var title = A.text().trim();
+                        var time = title.substr(-11, 10);
+                        arr.push(new TnuNews(id, _class, link, time, title));
+                    });
+                    resolve(arr);
+                } catch (err) {
                     reject(err);
                 }
-            );
+            }, function (err) {
+                reject(err);
+            });
         });
     }
 
     this.GetProfile = function () {
-        return new Promise(function(resolve, reject) {
-            base.Get(Endpoints.Make("StudentMark.aspx")).then(function (resp) {
+        return new Promise(function (resolve, reject) {
+            base.Get(Endpoints.Make("MarkAndView.aspx")).then(function (resp) {
                 var $ = base.ParseHtml(resp);
                 var idElement = $("#drpStudent option[selected]");
-                var id = $("#drpField option[selected]").val(),
-                    truong = "TNUS",
+                var id = idElement.val(),
+                    truong = "ICTU",
                     code = User.Username,
-                    name = $("#lblStudentName").text(),
-                    _class = $("#lblAdminClass").text(),
+                    name = idElement.text(),
+                    _class = $("#drpAdminClass option[selected]").text(),
                     major = $("#drpField option[selected]").text(),
-                    academicYear = $("#lblAy").text(),
-                    hedaotao = ($("#drpHeDaoTaoId option[selected]").text()) ? $("#drpHeDaoTaoId option[selected]").text() : "DHCQ";
-                resolve(new TnuProfile(truong,id, code, name, _class, major, academicYear, hedaotao));
+                    academicYear = $("#drpAcademicYear option[selected]").text(),
+                    hedaotao = $("#drpHeDaoTaoId option[selected]").text();
+                resolve(new TnuProfile(truong, id, code, name, _class, major, academicYear, hedaotao));
             }, reject);
         });
     }
 
     this.GetSemestersIn = function (uri) {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             base.Get(Endpoints.Make(uri)).then(function (resp) {
                 var $ = base.ParseHtml(resp);
                 var result = [];
@@ -201,14 +198,13 @@ module.exports = function () {
     };
 
     this.GetTimeTableOfStudy = function (semesterId) {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             base.Get(Endpoints.Make("Reports/Form/StudentTimeTable.aspx")).then(function (resp) {
                 var $ = base.ParseHtml(resp);
                 var post = {};
                 $("#Form1").serializeArray().forEach(function (entry) {
                     post[entry.name] = entry.value;
                 });
-
                 post["drpSemester"] = semesterId;
                 post["drpType"] = "B";
                 var drpTerms = [];
@@ -253,38 +249,37 @@ module.exports = function () {
                         var xlsFilePath = path.join(os.tmpdir(), parseInt(Math.random() * 1000) + (new Date().getTime()) + ".xls");
 
                         base.Post(Endpoints.Make(__URLTOKEN__ + "Reports/Form/StudentTimeTable.aspx"), post)
-                        .pipe(fs.createWriteStream(xlsFilePath))
-                        .on("unpipe", function () {s
-                            progress++;
-                            if (progress >= drpTerms.length) {
-                                resolve(tkb.Entries);
-                            }
-                        })
-                        .on("finish", function () {
-                            var sheets = xlsParse.xls2Obj(xlsFilePath);
-                            var raw = fs.readFileSync(xlsFilePath, "utf8");
-                            //fs.writeFileSync(xlsFilePath, "utf8"); 
-                            //console.log(xlsFilePath);
-                            fs.unlinkSync(xlsFilePath);
-                            // data.push(xlsFilePath, sheets);
-                            var $ = base.ParseHtml(raw.substr(raw.indexOf('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >')));
+                            .pipe(fs.createWriteStream(xlsFilePath))
+                            .on("unpipe", function () {
+                                s
+                                progress++;
+                                if (progress >= drpTerms.length) {
+                                    resolve(tkb.Entries);
+                                }
+                            })
+                            .on("finish", function () {
+                                var sheets = xlsParse.xls2Obj(xlsFilePath);
+                                var raw = fs.readFileSync(xlsFilePath, "utf8");
+                                //fs.writeFileSync(xlsFilePath, "utf8"); 
+                                //console.log(xlsFilePath);
+                                fs.unlinkSync(xlsFilePath);
+                                // data.push(xlsFilePath, sheets);
+                                var $ = base.ParseHtml(raw.substr(raw.indexOf('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >')));
 
-                            for (var sheetName in sheets) {
-                                var sheet = sheets[sheetName];
-                                
-                                for (var i = 10; i < sheet.length - 9; i++) {
-                                    // console.log( i+" "+sheet[i]);
-                                    var row = sheet[i];
+                                for (var sheetName in sheets) {
+                                    var sheet = sheets[sheetName];
+
+                                    for (var i = 10; i < sheet.length - 9; i++) {
+                                        // console.log( i+" "+sheet[i]);
+                                        var row = sheet[i];
                                         var thu = ICTU_WDAY[row[0]];
                                         var maMon = row[1];
                                         var hocPhan = row[4];
                                         var giaoVien = row[7];
                                         var dot = $("#drpTerm option[selected]").text().trim();
                                         var hinhThuc =
-                                            hocPhan.match(/\.TL[0-9]/ig) ? "TL" : false
-                                            ||
-                                            hocPhan.match(/\.TH[0-9]/ig) ? "TH" : false
-                                            ||
+                                            hocPhan.match(/\.TL[0-9]/ig) ? "TL" : false ||
+                                            hocPhan.match(/\.TH[0-9]/ig) ? "TH" : false ||
                                             "LT";
                                         var tiets = [];
                                         if (row.length == 12) {
@@ -292,14 +287,16 @@ module.exports = function () {
                                                 parseInt(row[8].substr(1)),
                                                 parseInt(row[9]),
                                             ];
-                                            
-                                        }if (row.length == 13) {
+
+                                        }
+                                        if (row.length == 13) {
                                             tiets = [
                                                 parseInt(row[8].substr(1)),
                                                 parseInt(row[9]),
                                                 parseInt(row[10]),
                                             ];
-                                        }if (row.length == 14) {
+                                        }
+                                        if (row.length == 14) {
                                             tiets = [
                                                 parseInt(row[8].substr(1)),
                                                 parseInt(row[9]),
@@ -328,7 +325,7 @@ module.exports = function () {
                                         //     subject = new TnuSubject(maMon, tenMon, hocPhan, 0);
                                         //     tkb.Subjects.push(subject);
                                         // }
-                                        
+
                                         for (var pivot = startTime; pivot.getTime() <= endTime.getTime(); pivot.setDate(pivot.getDate() + 7)) {
                                             while (pivot.getDay() != thu) {
                                                 pivot.setDate(pivot.getDate() + 1);
@@ -338,22 +335,22 @@ module.exports = function () {
 
                                             var month = (1 + date.getMonth()).toString();
                                             month = month.length > 1 ? month : '0' + month;
-                                          
+
                                             var day = date.getDate().toString();
                                             day = day.length > 1 ? day : '0' + day;
-                                            
-                                            var time =  day + '/' + month + '/' + year;
-                                            var entry = new TnuTimeTableEntry("LichHoc",hocPhan,maMon,time, tiets.toString(), diaDiem, hinhThuc, giaoVien, dot);
+
+                                            var time = day + '/' + month + '/' + year;
+                                            var entry = new TnuTimeTableEntry("LichHoc", hocPhan, maMon, time, tiets.toString(), diaDiem, hinhThuc, giaoVien, dot);
                                             tkb.Entries.push(entry);
                                         }
+                                    }
                                 }
-                            }
 
-                            progress++;
-                            if (progress >= drpTerms.length) {
-                                resolve(tkb);
-                            }
-                        });
+                                progress++;
+                                if (progress >= drpTerms.length) {
+                                    resolve(tkb);
+                                }
+                            });
                     });
                 }, reject);
             }, reject);
@@ -361,7 +358,7 @@ module.exports = function () {
     };
 
     this.GetTimeTableOfExam = function (semesterId) {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             base.Get(Endpoints.Make("StudentViewExamList.aspx")).then(function (resp) {
                 var $ = base.ParseHtml(resp);
 
@@ -383,7 +380,7 @@ module.exports = function () {
 
                     var DotThis = [];
 
-                    $("#drpDotThi option").each (function (k, dotThi) {
+                    $("#drpDotThi option").each(function (k, dotThi) {
                         if (k > 0) {
                             DotThis.push($(dotThi).val());
                         }
@@ -451,7 +448,7 @@ module.exports = function () {
 
     this.GetMarkTable = function () {
         return new Promise(function (resolve, reject) {
-            base.Get(Endpoints.Make(__URLTOKEN__ + "StudentMark.aspx")).then(function (resp) {
+            base.Get(Endpoints.Make(__URLTOKEN__ + "MarkAndView.aspx")).then(function (resp) {
                 var $ = base.ParseHtml(resp);
 
                 var post = {};
@@ -461,7 +458,7 @@ module.exports = function () {
 
                 post["btnView"] = "Xem";
 
-                base.Post(Endpoints.Make(__URLTOKEN__ + "StudentMark.aspx"), post).then(function (resp) {
+                base.Post(Endpoints.Make(__URLTOKEN__ + "MarkAndView.aspx"), post).then(function (resp) {
                     var $ = base.ParseHtml(resp);
 
                     var arr = {
@@ -472,32 +469,30 @@ module.exports = function () {
 
                     $("#tblStudentMark tr").each(function (k, tr) {
                         if (k == 0) {
-                            $(tr).find("td").each(function (_k,td) {
+                            $(tr).find("td").each(function (_k, td) {
                                 arr.labels.push($(td));
                             });
                         } else if (k == 1) {
-                            $(tr).find("td").each(function (_k,td) {
+                            $(tr).find("td").each(function (_k, td) {
                                 arr.keys.push($(td));
                             });
                         } else if (k == 2) {
-                            $(tr).find("td").each(function (_k,td) {
+                            $(tr).find("td").each(function (_k, td) {
                                 arr.values.push($(td));
                             });
                         }
                     });
 
                     var tb = new TnuMarkTable();
-                    tb.TongSoTC             = arr.values[4].text();
-                    tb.SoTCTuongDuong       = arr.values[5].text();
-                    tb.STCTLN               = arr.values[6].text();
-                    tb.DTBC                 = arr.values[7].text();
-                    tb.DTBCQD               = arr.values[8].text();
-                    tb.SoMonKhongDat        = arr.values[9].text();
-                    tb.SoTCKhongDat         = arr.values[10].text();
-                    tb.DTBXLTN              = arr.values[11].text();
-                    tb.DTBMonTN             = arr.values[12].text();
-
-
+                    tb.tongsotc = arr.values[4].text();
+                    tb.sotctuongduong = arr.values[5].text();
+                    tb.stctln = arr.values[6].text();
+                    tb.dtbc = arr.values[7].text();
+                    tb.dtbcqd = arr.values[8].text();
+                    tb.somonkhongdat = arr.values[9].text();
+                    tb.sotckhongdat = arr.values[10].text();
+                    tb.dtbxltn = arr.values[11].text();
+                    tb.dtbmontn = arr.values[12].text();
                     pivot = 13;
                     for (var i = 1; i < arr.labels.length; i++) {
                         var label = arr.labels[i];
@@ -507,8 +502,8 @@ module.exports = function () {
                         if (numCols && txts.length == 2) {
 
                             var maMon = txts[0];
-                            var tenMon = txts[1].substr(0, txts[1].length - 4) ;
-                            var soTC = txts[1].substr(-2,1);
+                            var tenMon = txts[1].substr(0, txts[1].length - 4);
+                            var soTC = txts[1].substr(-2, 1);
 
                             var point = {
                                 CC: "",
@@ -518,9 +513,13 @@ module.exports = function () {
                             };
 
                             for (var j = pivot; j < pivot + numCols; j++) {
-                                var key = arr.keys[j].text().trim();
-                                var val = arr.values[j].text().trim();
-                                point[key] = val;
+                                try {
+                                    var key = arr.keys[j].text().trim();
+                                    var val = arr.values[j].text().trim();
+                                    point[key] = val;
+                                } catch (ex) {
+                                    console.log(ex)
+                                }
                             }
 
                             tb.AddEntry(maMon, tenMon, soTC, txt, point.CC, point.THI, point.TKHP, point["Chữ"], point);
@@ -536,6 +535,6 @@ module.exports = function () {
     }
 };
 
-module.exports["Name"] = "TNUS";
-module.exports["Title"] = "Trường Đại học Khoa học - Đại học Thái Nguyên";
-module.exports["Description"] = "TNUS";
+module.exports["Name"] = "ICTU";
+module.exports["Title"] = "Đại học Công Nghệ Thông Tin và Truyền Thông";
+module.exports["Description"] = "ICTU";
