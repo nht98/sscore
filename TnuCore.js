@@ -7,12 +7,14 @@ var TNUS = require("./DataSource/TNUS");
 var TUE = require("./DataSource/TUE");
 var SFL = require("./DataSource/SFL");
 var TUAF = require("./DataSource/TUAF");
+var IS = require("./DataSource/IS");
 var TnuSchools = {
     "ICTU": ICTU,
     "TNUS": TNUS,
     "TUE": TUE,
     "SFL": SFL,
     "TUAF": TUAF,
+    "IS": IS
 };
 
 function Open (schoolCode) {

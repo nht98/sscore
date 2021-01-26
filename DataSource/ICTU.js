@@ -484,47 +484,51 @@ module.exports = function () {
                     });
 
                     var tb = new TnuMarkTable();
-                    tb.tongsotc = "";
+                    tb.tongsotc = arr.values[4].text();
                     tb.sotctuongduong = arr.values[5].text();
                     tb.stctln = arr.values[6].text();
                     tb.dtbc = arr.values[7].text();
                     tb.dtbcqd = arr.values[8].text();
-                    tb.somonkhongdat = "";
-                    tb.sotckhongdat = "";
-                    tb.dtbxltn = "";
-                    tb.dtbmontn = "";
-                    pivot = 13;
+                    tb.somonkhongdat = arr.values[9].text();
+                    tb.sotckhongdat = arr.values[10].text();
+                    tb.dtbxltn = arr.values[11].text();
+                    tb.dtbmontn = arr.values[12].text();
+                    pivot = 11;
                     for (var i = 1; i < arr.labels.length; i++) {
-                        var label = arr.labels[i];
-                        var numCols = parseInt(label.attr("colspan"));
-                        var txt = label.text().trim();
-                        var txts = txt.split("_", 2);
-                        if (numCols && txts.length == 2) {
+                            var label = arr.labels[i];
+                            var numCols = parseInt(label.attr("colspan"));
+                            var txt = label.text().trim();
+                            var txts = txt.split("_", 2);
+                            if (numCols && txts.length == 2) {
 
-                            var maMon = txts[0];
-                            var tenMon = txts[1].substr(0, txts[1].length - 4);
-                            var soTC = txts[1].substr(-2, 1);
+                                var maMon = txts[0];
+                                var tenMon = txts[1].substr(0, txts[1].length - 4);
+                                var soTC = txts[1].substr(-2, 1);
 
-                            var point = {
-                                CC: "",
-                                THI: "",
-                                TKHP: "",
-                                "Chữ": ""
-                            };
+                                var point = {
+                                    CC: "",
+                                    THI: "",
+                                    TKHP: "",
+                                    "Chữ": ""
+                                };
+                                pivot += numCols
+                                let tmep = pivot - numCols;
+                                console.log(tmep)
+                                for (var j = tmep; j < pivot; j++) {
+                                    try {
+                                        var key = arr.keys[j].text().trim();
+                                        var val = arr.values[j].text().trim();
+                                        point[key] = val;
+                                        console.log(key)
+                                        console.log(val)
+                                    } catch (ex) {
 
-                            for (var j = pivot; j < pivot + numCols; j++) {
-                                try {
-                                    var key = arr.keys[j].text().trim();
-                                    var val = arr.values[j].text().trim();
-                                    point[key] = val;
-                                } catch (ex) {
+                                        console.log(numCols)
+                                    }
                                 }
+
+                                tb.AddEntry(maMon, tenMon, soTC, txt, point.CC, point.THI, point.TKHP, point["Chữ"], point);
                             }
-
-                            tb.AddEntry(maMon, tenMon, soTC, txt, point.CC, point.THI, point.TKHP, point["Chữ"], point);
-
-                            pivot += numCols;
-                        }
                     }
 
                     resolve([tb]);

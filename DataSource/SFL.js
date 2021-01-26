@@ -48,9 +48,9 @@ var ICTU_WDAY = {
 };
 
 module.exports = function () {
-    this["Name"] = "TNUS";
-    this["Title"] = "Đại học Khoa học";
-    this["Description"] = "TNUS";
+    this["Name"] = "SFL";
+    this["Title"] = "Đại học Ngoại Ngữ Thái Nguyên";
+    this["Description"] = "SFL";
 
     var __URLTOKEN__ = "";
 

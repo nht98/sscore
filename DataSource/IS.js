@@ -21,7 +21,7 @@ const Endpoints = {
         return "http://daotao2.tnu.edu.vn/" + path;
     },
     Make: function (endpoint) {
-        return Endpoints.Raw("dhnl/" + endpoint);
+        return Endpoints.Raw("kqt/" + endpoint);
     }
 };
 Endpoints.Login = function () {
@@ -48,9 +48,9 @@ var ICTU_WDAY = {
 };
 
 module.exports = function () {
-    this["Name"] = "TUAF";
-    this["Title"] = "Đại học Nông Lâm Thái Nguyên";
-    this["Description"] = "TUAF";
+    this["Name"] = "IS";
+    this["Title"] = "Khoa Quốc Tế - Đại Học Thái Nguyên";
+    this["Description"] = "IS";
 
     var __URLTOKEN__ = "";
 
@@ -484,15 +484,15 @@ module.exports = function () {
                     });
 
                     var tb = new TnuMarkTable();
-                    tb.tongsotc = arr.values[4].text();
+                    tb.tongsotc = "";
                     tb.sotctuongduong = arr.values[5].text();
                     tb.stctln = arr.values[6].text();
                     tb.dtbc = arr.values[7].text();
                     tb.dtbcqd = arr.values[8].text();
-                    tb.somonkhongdat = arr.values[9].text();
-                    tb.sotckhongdat = arr.values[10].text();
-                    tb.dtbxltn = arr.values[11].text();
-                    tb.dtbmontn = arr.values[12].text();
+                    tb.somonkhongdat = "";
+                    tb.sotckhongdat = "";
+                    tb.dtbxltn = "";
+                    tb.dtbmontn = "";
                     pivot = 13;
                     for (var i = 1; i < arr.labels.length; i++) {
                         var label = arr.labels[i];
@@ -518,7 +518,6 @@ module.exports = function () {
                                     var val = arr.values[j].text().trim();
                                     point[key] = val;
                                 } catch (ex) {
-                                    console.log(ex)
                                 }
                             }
 
@@ -535,6 +534,6 @@ module.exports = function () {
     }
 };
 
-module.exports["Name"] = "TUAF";
-module.exports["Title"] = "Đại học Nông Lâm Thái Nguyên";
-module.exports["Description"] = "TUAF";
+module.exports["Name"] = "IS";
+module.exports["Title"] = "Khoa Quốc Tế - Đại Học Thái Nguyên";
+module.exports["Description"] = "IS";
